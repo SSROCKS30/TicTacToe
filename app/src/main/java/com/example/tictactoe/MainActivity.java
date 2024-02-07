@@ -1,11 +1,14 @@
 package com.example.tictactoe;
 
+import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Arrays;
@@ -70,11 +73,13 @@ public class MainActivity extends AppCompatActivity {
                     // Update the status bar for winner announcement
                     TextView status = findViewById(R.id.status);
                     status.setText(winnerStr);
+                    showCustomDialog(winnerStr);
                 }
             }
             if (counter == 9 && flag == 0) {
                 TextView status = findViewById(R.id.status);
                 status.setText("Match Draw");
+                showCustomDialog("Match Draw");
             }
         }
     }
@@ -115,5 +120,36 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         resetButton();
+    }
+
+    private void showCustomDialog(String s) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // Inflate the custom layout
+        View customView = getLayoutInflater().inflate(R.layout.custom_dialog_layout, null);
+        builder.setView(customView);
+
+        TextView customMessageTextView = customView.findViewById(R.id.customMessageTextView);
+        customMessageTextView.setText(s);
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // Handle positive button click
+                        dialogInterface.dismiss();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // Handle negative button click
+                        dialogInterface.dismiss();
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        int backgroundColor = getResources().getColor(R.color.purple);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(backgroundColor));
     }
 }
